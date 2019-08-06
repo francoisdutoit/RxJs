@@ -1,3 +1,4 @@
+
 var refreshButton = document.querySelector('.refresh');
 var closeButton1 = document.querySelector('.close1');
 var closeButton2 = document.querySelector('.close2');
@@ -9,15 +10,18 @@ var close2ClickStream = Rx.Observable.fromEvent(closeButton2, 'click');
 var close3ClickStream = Rx.Observable.fromEvent(closeButton3, 'click');
 
 var requestStream = refreshClickStream.startWith('startup click')
+
     .map(function() {
         var randomOffset = Math.floor(Math.random()*500);
         return 'https://api.github.com/users?since=' + randomOffset;
     });
 
 var responseStream = requestStream
+
     .flatMap(function (requestUrl) {
         return Rx.Observable.fromPromise($.getJSON(requestUrl));
     });
+
 
 function createSuggestionStream(closeClickStream) {
     return closeClickStream.startWith('startup click')
@@ -34,10 +38,10 @@ function createSuggestionStream(closeClickStream) {
         .startWith(null);
 }
 
+
 var suggestion1Stream = createSuggestionStream(close1ClickStream);
 var suggestion2Stream = createSuggestionStream(close2ClickStream);
 var suggestion3Stream = createSuggestionStream(close3ClickStream);
-
 
 // Rendering ---------------------------------------------------
 function renderSuggestion(suggestedUser, selector) {
